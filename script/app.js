@@ -13,8 +13,12 @@
 	//View
 	var TaskView = Backbone.View.extend({
 		tagName: 'li',
-		//className: 'liClass',
-		//id: 'liId'
+		events: {
+			"click .command": "sayHello"	
+		},
+		sayHello: function(){
+			alert('hello');	
+		},
 		template: _.template($('#task-template').html()),
 		render: function(){
 			var template = this.template(this.model.toJSON());
