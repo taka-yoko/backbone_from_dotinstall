@@ -46,7 +46,6 @@
 			this.$el.html(template);
 			return this;
 		}
-		
 	});
 	
 	var TasksView = Backbone.View.extend({
@@ -58,11 +57,18 @@
 			var taskView = new TaskView({model: task});
 			this.$el.append(taskView.render().el);	
 		},
+		updateCount: function(){
+			var uncompletedTasks = this.collection.filter(function(task){
+				return !task.get('completed');
+			});
+			$('#count').html(uncompletedTasks.length);
+		},
 		render: function(){
 			this.collection.each(function(task){
 				var taskView = new TaskView({model: task});
 				this.$el.append(taskView.render().el);
 			}, this);
+			this.updateCount();
 			return this;
 		}
 	});
@@ -74,8 +80,12 @@
 		},
 		submit: function(e){
 			e.preventDefault();
-			var task = new Task({title: $('#title').val()});
-			this.collection.add(task);
+			//var task = new Task({title: $('#title').val()});
+			var task = new Task();
+			if(task.set({title: $('#title').val()}, {validate: true})){
+				this.collection.add(task);
+			}
+			
 		}
 	});
 	
